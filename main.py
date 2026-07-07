@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 
 from app.api.patient import router as patient_router
+from app.api.doctor import router as doctor_router
 
 app = FastAPI(
     title="Hospital Management API"
 )
 
 app.include_router(patient_router)
-
+app.include_router(doctor_router)
 
 @app.get("/")
 def home():
