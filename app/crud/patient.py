@@ -30,4 +30,37 @@ def get_patient(db: Session, patient_id: int):
         .first()
     )
 
+def update_patient(
+    db: Session,
+    patient_id: int,
+    patient: PatientCreate
+):
+    db_patient = get_patient(db, patient_id)
 
+    if not db_patient:
+        return None
+
+    db_patient.name = patient.name
+    db_patient.age = patient.age
+    db_patient.gender = patient.gender
+    db_patient.phone = patient.phone
+
+    db.commit()
+    db.refresh(db_patient)
+
+    return db_patient
+
+
+def delete_patient(
+    db: Session,
+    patient_id: int
+):
+    db_patient = get_patient(db, patient_id)
+
+    if not db_patient:
+        return None
+
+    db.delete(db_patient)
+    db.commit()
+
+    return db_patient
