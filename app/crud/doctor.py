@@ -31,3 +31,36 @@ def get_doctor(db:Session,doctor_id:int):
 
     
 
+def update_doctor(
+        db: Session,
+        doctor_id : int,
+        doctor : DoctorCreate
+):
+    db_doctor = get_doctor(db,doctor_id)
+
+    if not db_doctor:
+        return None
+    db_doctor.name = doctor.name
+    db_doctor.gender = doctor.gender
+    db_doctor.specialization = doctor.specialization
+    db_doctor.qualification = doctor.qualification
+    db_doctor.phone = doctor.phone
+    db_doctor.experience = doctor.experience
+
+    db.commit()
+    db.refresh(db_doctor)
+
+    return db_doctor
+
+def delete_doctor(
+        db: Session,
+        doctor_id : int
+):
+    db_doctor = get_doctor(db,doctor_id)
+
+    if not db_doctor:
+        return None
+    db.delete(db_doctor)
+    db.commit()
+
+    return db_doctor
