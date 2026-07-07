@@ -30,3 +30,23 @@ def create(
     return create_doctor(db,doctor)
 
 
+@router.get("/",response_model=list[DoctorResponse])
+def read_all(
+    db: Session = Depends(get_db)
+):
+    return get_doctors(db)
+
+
+@router.get("/{doctor_id}",response_model=DoctorResponse)
+def read_one(
+    doctor_id : int,
+    db: Session = Depends(get_db)
+):
+    doctor = get_doctor(db,doctor_id)
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+    return doctor
