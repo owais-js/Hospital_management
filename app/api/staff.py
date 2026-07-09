@@ -6,7 +6,8 @@ from app.core.database import get_db
 from app.crud.staff import(
     create_staff,
     get_staff,
-    get_staff_member
+    get_staff_member,
+    update_staff
 )
 
 from app.schemas.staff import(
@@ -45,3 +46,21 @@ def read_one(
             detail="Staff Member not found!"
         )
     return staff
+
+@router.put("/{staff_id}")
+def update(
+    staff_id : int,
+    staff : StaffCreate,
+    db : Session = Depends(get_db)
+):
+    updated = update_staff(
+        db,
+        staff_id,
+        staff
+    )
+    if not updated:
+        raise HTTPException(
+            status_code=404,
+            detail="Staff not found!"
+        )
+    return updated
