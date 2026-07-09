@@ -7,7 +7,8 @@ from app.crud.staff import(
     create_staff,
     get_staff,
     get_staff_member,
-    update_staff
+    update_staff,
+    delete_staff
 )
 
 from app.schemas.staff import(
@@ -64,3 +65,21 @@ def update(
             detail="Staff not found!"
         )
     return updated
+
+@router.delete("/{staff_id}")
+def delete(
+    staff_id : int,
+    db : Session = Depends(get_db)
+):
+    deleted = delete_staff(
+        db,
+        staff_id
+    )
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Staff not found!"
+        )
+    return{
+        "message" : "Staff Deleted Successfully!"
+    }
