@@ -27,3 +27,24 @@ def get_staff_member(db:Session,staff_id:int):
         .filter(Staff.id == staff_id)
         .first()
     )
+
+def update_staff(
+        db : Session,
+        staff_id : int,
+        staff : StaffCreate
+):
+    db_staff = get_staff_member(db,staff_id)
+
+    if not db_staff:
+        return None
+    db_staff.name = staff.name
+    db_staff.gender = staff.gender
+    db_staff.designation = staff.designation
+    db_staff.department = staff.department
+    db_staff.phone = staff.phone
+    db_staff.salary = staff.salary
+
+    db.commit()
+    db.refresh(db_staff)
+
+    return db_staff
